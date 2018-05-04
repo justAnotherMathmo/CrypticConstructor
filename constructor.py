@@ -6,6 +6,18 @@ import numpy as np
 # number_grid's have 0's and clue numbers in the entries
 # word_grid's have '' (unconfimed), '-' (confirmed blank) and letters in the entries
 
+# Largest possible number that a clue could take
+max_clue_num = 1000
+
+
+def func_with_empty(function, iterable, fill=0):
+    """Applies a function to an iterable, with a default value if empty"""
+    if len(iterable) == 0:
+        return fill
+    else:
+        return function(iterable)
+
+
 @np.vectorize
 def check_overlap(a: str, b: str) -> bool:
     """Can a and b overlap?"""
@@ -38,20 +50,26 @@ def update_grid(grid: np.ndarray, answer: str, start: (int, int), is_across: boo
         grid[grid_indices] = new_grid
 
     # Sanity checking the times crossing style basically boils down to "is there a 2 x 2 box filled with letters"?
-    # if is_across:
-
-
-
-def confirm_blank(grid: np.ndarray, position: (int, int)):
-    return update_grid(grid, '-', position, True)
-
-
-# def generate_word_grid(number_grid: np.ndarray, across_clues: dict, down_clues: dict) -> Union[np.ndarray, None]:
-#     word_grid = np.zeros(number_grid.shape, dtype=str)
-#
-#     for values
-#
-#     return word_grid
+    if is_across:
+        for index in range(start[1], start[1] + word_length - 1):
+            if start[0] < grid.shape[0] - 1:
+                square_test = len(''.join(grid[start[0]:start[0] + 2, index:index + 2].reshape(4)).replace('-', ''))
+                if square_test == 4:
+                    raise ValueError("Adjacent across clues")
+            if start[0] > 0:
+                square_test = len(''.join(grid[start[0] - 1:start[0] + 1, index:index + 2].reshape(4)).replace('-', ''))
+                if square_test == 4:
+                    raise ValueError("Adjacent across clues")
+    else:
+        for index in range(start[0], start[0] + word_length - 1):
+            if start[1] < grid.shape[1] - 1:
+                square_test = len(''.join(grid[index:index + 2, start[1]:start[1] + 2].reshape(4)).replace('-', ''))
+                if square_test == 4:
+                    raise ValueError("Adjacent down clues")
+            if start[1] > 0:
+                square_test = len(''.join(grid[index:index + 2, start[1] - 1:start[1] + 1].reshape(4)).replace('-', ''))
+                if square_test == 4:
+                    raise ValueError("Adjacent down clues")
 
 
 def empty_col_row_checker(grid: np.ndarray) -> bool:
@@ -77,14 +95,13 @@ def constructor(grid_size, across_clues, down_clues):
 
 
 def backtracker(number_grid: np.ndarray, word_grid: np.ndarray, across_clues: dict, down_clues: dict) -> (np.ndarray, np.ndarray):
-    print(word_grid)
     if len(across_clues) + len(down_clues) == 0:
         return number_grid, word_grid
 
     # Copy everything so we don't modify ducts above
     ngrid = number_grid.copy()
 
-    clue_num = min(min(across_clues), min(down_clues))
+    clue_num = min(func_with_empty(min, across_clues, max_clue_num), func_with_empty(min, down_clues, max_clue_num))
     start_row_index, start_col_index = np.unravel_index(ngrid.argmax() + (clue_num != 1), ngrid.shape)
 
     for row_index in range(start_row_index, ngrid.shape[0]):
