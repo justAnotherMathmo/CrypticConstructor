@@ -3,7 +3,7 @@ import re
 import requests
 
 
-def _scrape_clues(url):
+def _scrape_clues(url: str) -> list:
     req = requests.get(url)
     number_and_clue_regex = '<tr>\n<td valign="top">([0-9]*)</td>\n<td>(.*)</td>\n</tr>'
     answer_regex = '<tr>\n<td></td>\n<td><strong>([A-Z]*)</strong> - (.*)</td>\n</tr>'
@@ -13,7 +13,7 @@ def _scrape_clues(url):
     return all_clues
 
 
-def parse_clue_tuple(clue_tuple):
+def parse_clue_tuple(clue_tuple: tuple) -> tuple:
     clue_number = int(clue_tuple[0])
     sanitised_clue = html.unescape(re.sub('<.*?>', '', clue_tuple[1]))
     answer = clue_tuple[2]
@@ -22,7 +22,7 @@ def parse_clue_tuple(clue_tuple):
     return clue_number, sanitised_clue, answer, construction
 
 
-def get_parsed_clues(url):
+def get_parsed_clues(url: str) -> (dict, dict):
     dirty_clues = _scrape_clues(url)
     across_clues = {}
     down_clues = {}
