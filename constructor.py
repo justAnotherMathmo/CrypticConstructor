@@ -104,6 +104,8 @@ def constructor(grid_size, across_clues, down_clues):
         if i not in answer[0]:
             raise ValueError("Crossword not completely filled - something might have gone wrong getting the clues")
 
+    return answer
+
 
 def backtracker(number_grid: np.ndarray, word_grid: np.ndarray, across_clues: dict, down_clues: dict) -> (np.ndarray, np.ndarray):
     if len(across_clues) + len(down_clues) == 0:

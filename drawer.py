@@ -28,7 +28,7 @@ def ascii_drawer(num_grid, word_grid, across_clues, down_clues):
     return wgrid
 
 
-def draw_box(t, x, y, size, fill_color):
+def _draw_box(t, x, y, size, fill_color):
     t.penup()
     t.goto(x, y)
     t.pendown()
@@ -43,7 +43,25 @@ def draw_box(t, x, y, size, fill_color):
     t.end_fill() # Go ahead and fill the rectangle!
 
 
+def turtle_drawer(num_grid, word_grid, across_clues, down_clues):
+    board_size = num_grid.shape
+    c = ('white', 'black')
+    board = turtle.Turtle()
+    board.speed(0)
+    start_x = -100
+    start_y = -100
+    box_size = 30
+    for i in range(board_size[0]):
+        for j in range(board_size[1]):
+            _draw_box(board,
+                      start_x+j*box_size, start_y+i*box_size, box_size,
+                      c[1] if (word_grid[i, j] in ['', '-']) else c[0])
+    board.hideturtle()
+    turtle.done()
+
+
 def drawer(num_grid, word_grid, across_clues, down_clues):
     # print(num_grid)
     # return solution_drawer(word_grid)
-    return ascii_drawer(num_grid, word_grid, across_clues, down_clues)
+    return turtle_drawer(num_grid, word_grid, across_clues, down_clues)
+    # return ascii_drawer(num_grid, word_grid, across_clues, down_clues)
