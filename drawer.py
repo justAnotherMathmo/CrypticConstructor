@@ -9,7 +9,7 @@ ascii_shaded = '%%'
 def solution_drawer(word_grid):
     wgrid = word_grid.copy()
     wgrid[wgrid == ''] = '-'
-    return wgrid
+    print(wgrid)
 
 
 def ascii_drawer(num_grid, word_grid, across_clues, down_clues):
@@ -25,7 +25,7 @@ def ascii_drawer(num_grid, word_grid, across_clues, down_clues):
     wgrid[num_grid != 0] = num_grid[num_grid != 0]
     wgrid[vector_len(wgrid) < 2] = ['0' + str(i) for i in range(1, 10)]
 
-    return wgrid
+    print(wgrid)
 
 
 def _draw_box(t, x, y, size, fill_color, small_text=0):
