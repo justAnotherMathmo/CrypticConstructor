@@ -5,8 +5,8 @@ import requests
 
 def _scrape_clues(url: str) -> list:
     req = requests.get(url)
-    number_and_clue_regex = '<tr>\n<td valign="top">([0-9]*)</td>\n<td>(.*)</td>\n</tr>'
-    answer_regex = '<tr>\n<td></td>\n<td><strong>([A-Z]*)</strong> - (.*)</td>\n</tr>'
+    number_and_clue_regex = '<tr>\n<td valign="top">([0-9]*)</td>\n<td>(.*?)</td>\n</tr>'
+    answer_regex = '<tr>\n<td.*?></td>\n<td><.*?>([A-Z- ]*)</.*?>(.*)</td>\n</tr>'
     regex_string = number_and_clue_regex + '\n' + answer_regex
     all_clues = re.findall(regex_string, req.text)
 
@@ -16,7 +16,7 @@ def _scrape_clues(url: str) -> list:
 def parse_clue_tuple(clue_tuple: tuple) -> tuple:
     clue_number = int(clue_tuple[0])
     sanitised_clue = html.unescape(re.sub('<.*?>', '', clue_tuple[1]))
-    answer = clue_tuple[2]
+    answer = re.sub('[^A-Z]', '', clue_tuple[2])
     construction = html.unescape(clue_tuple[3])
 
     return clue_number, sanitised_clue, answer, construction
