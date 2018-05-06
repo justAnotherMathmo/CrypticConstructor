@@ -72,21 +72,6 @@ def update_grid(grid: np.ndarray, answer: str, start: (int, int), is_across: boo
                     raise ValueError("Adjacent down clues")
 
 
-def empty_col_row_checker(grid: np.ndarray) -> bool:
-    """Checks to see if the grid has a full column/row of empty cells"""
-    return True
-
-
-def symmetry_checker(grid: np.ndarray) -> bool:
-    """Checks to see if the grid has 180 degree rotational symmetry"""
-    return True
-
-
-def adjacent_word_checker(grid: np.ndarray) -> bool:
-    """Checks to see if the grid contains any words next to each other"""
-    return True
-
-
 def constructor(grid_size, across_clues, down_clues):
     number_grid = np.zeros((grid_size, grid_size), dtype=np.int16)
     word_grid = np.zeros((grid_size, grid_size), dtype=str)
