@@ -4,11 +4,13 @@ import constructor
 import drawer
 
 if __name__ == '__main__':
-    grid_size = int(sys.argv[1])  # 13
-    url = sys.argv[2]  # r'https://times-xwd-times.livejournal.com/1935273.html'
+    try:
+        grid_size = int(sys.argv[1])
+        url = sys.argv[2]
+    except IndexError:
+        grid_size = 13
+        url = r'https://times-xwd-times.livejournal.com/1935273.html'
     across_clues, down_clues = collector.get_parsed_clues(url)
-    print(across_clues)
-    print(down_clues)
 
     num_grid, word_grid = constructor.constructor(grid_size, across_clues, down_clues)
 
