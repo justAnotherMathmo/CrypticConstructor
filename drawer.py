@@ -92,7 +92,7 @@ def turtle_drawer(num_grid: np.ndarray, word_grid: np.ndarray=None,
                 clue_split = clue_splitter(clue, clue_width)
                 for clue_frac in clue_split:
                     board.goto(x_pos, y)
-                    board.write(clue_frac, font=('Arial', small_font, "normal"))
+                    board.write(f'{idx}: {clue_frac}', font=('Arial', small_font, "normal"))
                     y -= small_step
             return y
 
